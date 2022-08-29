@@ -1,0 +1,72 @@
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.mod
+*.a
+a.out
+*.dSYM
+
+## binaries
+*.o
+
+
+# Output files #
+################
+*.h5
+*.h5.*
+*.bin
+out.*
+o.*
+run
+
+
+disk.*
+
+
+# Logs and databases #
+######################
+*.err
+*.log
+*.sql
+*.sqlite
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# OS generated files #
+######################
+.DS_Store
+
+.remote-sync.json
+.remote-sync_macos.json
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE/Editor Files #
+####################
+.idea
+.vscode
+
+# Documentation build files #
+#############################
+docs/doxygen/build
+docs/sphinx/build
+

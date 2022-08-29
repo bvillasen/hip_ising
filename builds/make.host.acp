@@ -1,0 +1,17 @@
+#-- make.host for AMD Cloud Platform (ACP)
+#-- Compiler and flags for different build type
+CC                = cc
+CXX               = c++
+GPUCXX           ?= hipcc
+
+
+CFLAGS_DEBUG      = -g -O0
+CFLAGS_OPTIMIZE   = -g -O2
+
+CXXFLAGS_DEBUG    = -g -O0 -std=c++11
+CXXFLAGS_OPTIMIZE = -Ofast -std=c++11
+
+GPUFLAGS          = --offload-arch=gfx90a
+HIPCONFIG	  = $(shell hipconfig -C)
+
+OMP_NUM_THREADS   = 8
