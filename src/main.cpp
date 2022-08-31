@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]){
 
   int N = 1024;
-  int n_iter = 20;
+  int n_iter = 10;
 
   Grid3D Grid(N);
   Grid.Print_size();

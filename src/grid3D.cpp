@@ -1,5 +1,6 @@
 #include "grid3D.h"
-#include <hip/hip_runtime.h>
+#include "gpu.hpp"
+
 
 Grid3D::Grid3D( int N_val ){
 
@@ -25,7 +26,7 @@ void Grid3D::Initialize(){
 
 void Grid3D::Allocate_CPU_Memory(){
 
-  HIP_CHECK( hipHostMalloc( &h_spins, N_cells_total*sizeof(double), hipHostMallocDefault ) );
+  CHECK( hipHostMalloc( &h_spins, N_cells_total*sizeof(double), hipHostMallocDefault ) );
   std::cout <<  " Allocated CPU Memory." << std::endl;
 
 }
@@ -33,9 +34,9 @@ void Grid3D::Allocate_CPU_Memory(){
 
 void Grid3D::Allocate_GPU_Memory(){
 
-HIP_CHECK( hipMalloc( (void**)&d_spins, N_cells_total*sizeof(double) ) );
-HIP_CHECK( hipMalloc( (void**)&d_spins_out, N_cells_total*sizeof(double) ) );
-HIP_CHECK( hipMalloc( (void**)&d_random_field, N_cells_total*sizeof(float) ) );
+CHECK( hipMalloc( (void**)&d_spins, N_cells_total*sizeof(double) ) );
+CHECK( hipMalloc( (void**)&d_spins_out, N_cells_total*sizeof(double) ) );
+CHECK( hipMalloc( (void**)&d_random_field, N_cells_total*sizeof(float) ) );
 std::cout <<  " Allocated GPU Memory." << std::endl;
 
 }
@@ -48,10 +49,10 @@ void Grid3D::Print_Timers(){
 
 void Grid3D::Reset( ){
 
-  HIP_CHECK( hipHostFree( h_spins ) );
-  HIP_CHECK( hipFree( d_spins ) );
-  HIP_CHECK( hipFree( d_spins_out ) );
-  HIP_CHECK( hipFree( d_random_field ) );
+  CHECK( hipHostFree( h_spins ) );
+  CHECK( hipFree( d_spins ) );
+  CHECK( hipFree( d_spins_out ) );
+  CHECK( hipFree( d_random_field ) );
 
   hiprandDestroyGenerator( RND.generator );
 

@@ -1,23 +1,24 @@
 #include "global.h"
 #include "grid3D.h"
+#include "gpu.hpp"
 
 
 
 void Grid3D::Initialize_Random_Generator( int seed ){
 
   std::cout << "Initializing Random Generator..." << std::endl;
-  hiprandCreateGenerator( &RND.generator,  HIPRAND_RNG_PSEUDO_MTGP32 );
+  curandCreateGenerator( &RND.generator,  CURAND_RNG_PSEUDO_MTGP32 );
 
   std::cout << " Using seed: " << seed << std::endl;
-  hiprandSetPseudoRandomGeneratorSeed( RND.generator, seed );
+  curandSetPseudoRandomGeneratorSeed( RND.generator, seed );
 
 }
 
 void Grid3D::Generate_Random_Field(){
 
   Time.Gen_Rand.Start();
-  hiprandGenerateUniform( RND.generator, d_random_field, N_cells_total );
-  hipDeviceSynchronize();
+  curandGenerateUniform( RND.generator, d_random_field, N_cells_total );
+  cudaDeviceSynchronize();
   Time.Gen_Rand.End();
 
 }
@@ -51,7 +52,7 @@ void Grid3D::Apply_Ising_Update(){
   dim3 dim1dBlock(TPB, 1, 1);                                          
   
   hipLaunchKernelGGL(Ising_kernel, dim1dGrid, dim1dBlock, 0, 0, N, n_ghost, N_cells_total, d_random_field, d_spins, d_spins_out );
-  hipDeviceSynchronize();
+  cudaDeviceSynchronize();
   Time.Ising_Update.End();
 
 

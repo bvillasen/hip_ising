@@ -1,13 +1,14 @@
 #-- Set default include makefile
 MACHINE ?= $(shell builds/machine.sh)
 TYPE    ?= default
+COMPILE_TYPE ?= -DUSE_HIP
 
 include builds/make.host.$(MACHINE)
 # include builds/make.type.$(TYPE)
 
-DIRS     := src 
+DFLAGS += $(COMPILE_TYPE)
 
-SUFFIX ?= .$(TYPE).$(MACHINE)
+DIRS     := src 
 
 CFILES   := $(foreach DIR,$(DIRS),$(wildcard $(DIR)/*.c))
 CPPFILES := $(foreach DIR,$(DIRS),$(wildcard $(DIR)/*.cpp))
@@ -40,20 +41,18 @@ CFLAGS   += $(DFLAGS) -Isrc
 CXXFLAGS += $(DFLAGS) -Isrc
 GPUFLAGS += $(DFLAGS) -Isrc
 
-
-CXXFLAGS += -I$(ROCM_PATH)/include
-GPUFLAGS += -I$(ROCM_PATH)/include
-LIBS += -L$(ROCM_PATH)/lib -lhiprand
-
-
-DFLAGS    += -DO_HIP
-CXXFLAGS  += $(HIPCONFIG)
-GPUCXX    ?= hipcc
-GPUFLAGS  += -std=c++11 -Wall -ferror-limit=1 -fPIE
-LD        := $(CXX)
-LDFLAGS   := $(CXXFLAGS)
-LIBS      += -L$(ROCM_PATH)/lib -lamdhip64 -lhsa-runtime64
-
+ifeq ($(findstring -DUSE_HIP,$(DFLAGS)),-DUSE_HIP)
+	CXXFLAGS += -I$(ROCM_PATH)/include
+	GPUFLAGS += -I$(ROCM_PATH)/include
+	LIBS += -L$(ROCM_PATH)/lib -lhiprand
+	CXXFLAGS  += $(HIPCONFIG)
+	GPUCXX    ?= hipcc
+	GPUFLAGS  += -std=c++11 -Wall -ferror-limit=1 -fPIE
+	LD        := $(CXX)
+	LDFLAGS   := $(CXXFLAGS)
+	LIBS      += -L$(ROCM_PATH)/lib -lamdhip64 -lhsa-runtime64
+	SUFFIX ?= .$(TYPE).$(MACHINE).hip
+endif
 
 .SUFFIXES: .c .cpp .cu .o
 

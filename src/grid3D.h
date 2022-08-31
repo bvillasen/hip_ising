@@ -2,8 +2,11 @@
 #define GRID3D_H
 
 #include "global.h"
-#include <hiprand.h>
 #include "timing.h"
+
+#ifdef USE_HIP
+#include<hiprand/hiprand.h>
+#endif
 
 class Grid3D{
 public:

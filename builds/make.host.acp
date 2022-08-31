@@ -15,3 +15,5 @@ GPUFLAGS          = --offload-arch=gfx90a
 HIPCONFIG	  = $(shell hipconfig -C)
 
 OMP_NUM_THREADS   = 8
+
+COMPILE_TYPE = -DUSE_HIP
